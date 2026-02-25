@@ -6,23 +6,25 @@ import 'package:counter_bloc/bloc/repository/favroite_repository.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvents, FavoriteItemState> {
 
-  List<FavoriteItemModel> favoriteList = [];
-  FavoriteRepository _favoriteRepository;
+  List<FavoriteItemModal> favoriteList = [];
 
-  FavoriteBloc(this._favoriteRepository) : super(FavoriteItemState()) {
-    on<FetchFavoriteEvent>(fetchListItems);
+  FavoriteRepository _repository;
+
+  FavoriteBloc(this._repository) : super(const FavoriteItemState()) {
+    on<FetchFavoriteList>(fetchList);
+    on<FavoriteItem>(_addToFavoriteItem);
   }
 
-  void fetchListItems(
-    FetchFavoriteEvent event,
-    Emitter<FavoriteItemState> emit,
-  ) async {
-    favoriteList = await _favoriteRepository.getItem();
-    emit(
-      state.copyWith(
-        favoriteItemList: favoriteList,
-        listStatus: ListStatus.success,
-      ),
-    );
+  void fetchList(FetchFavoriteList event,
+      Emitter<FavoriteItemState> emit) async {
+    favoriteList = await _repository.fetchItems();
+    emit(state.copyWith(listStatus: ListStatus.success,
+        favoriteItemList: List.from(favoriteList)));
+  }
+
+  void _addToFavoriteItem(FavoriteItem event,Emitter<FavoriteItemState> emit)async {
+    final index = favoriteList.indexWhere((element) => element.id == event.item.id);
+    favoriteList[index] = event.item;
+    emit(state.copyWith(favoriteItemList: List.from(favoriteList)));
   }
 }

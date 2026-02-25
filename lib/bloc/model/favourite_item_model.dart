@@ -1,29 +1,29 @@
-import "package:equatable/equatable.dart";
+import 'package:equatable/equatable.dart';
 
-class FavoriteItemModel extends Equatable {
-  final int? id;
-  final String? value;
-  final bool? isDeleting;
-  final bool? isFavorite;
-
-  FavoriteItemModel({
-     this.id,
-     this.value,
-     this.isDeleting,
-     this.isFavorite,
+class FavoriteItemModal extends Equatable {
+  const FavoriteItemModal({
+    required this.id,
+    required this.value,
+    this.isDeleting = false,
+    this.isFavorite = false,
   });
 
-  FavoriteItemModel copyWith({
-    int? id,
+  final String id;
+  final String value;
+  final bool isDeleting;
+  final bool isFavorite;
+
+  FavoriteItemModal copyWith({
+    String? id,
     String? value,
     bool? isDeleting,
     bool? isFavorite,
   }) {
-    return FavoriteItemModel(
+    return FavoriteItemModal(
       id: id ?? this.id,
       value: value ?? this.value,
       isDeleting: isDeleting ?? this.isDeleting,
-      isFavorite: isFavorite ?? this.isFavorite,
+      isFavorite: isFavorite ?? this.isFavorite
     );
   }
 
